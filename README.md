@@ -8,14 +8,14 @@ How To Install With One Command
 This can be run from a stand-alone machine with this simple command:
 
 ```bash
-wget -qO- https://github.com/yannack/provisioning/raw/master/run.sh | bash
+bash <(wget -qO- https://github.com/yannack/provisioning/raw/master/run.sh)
 ```
 
 If you need a shorter URL, and trust my shortening (I do), e.g., if you can't
 copy/paste and are retyping, this is equivalent:
 
 ```bash
-wget -qO- http://goo.gl/3cihfh | bash
+bash <(wget -qO- http://goo.gl/3cihfh)
 ```
 
 N.B.: This will deploy, by default a desktop machine on the local machine. If you
