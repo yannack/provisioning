@@ -1,0 +1,35 @@
+---
+- name: prepare path for powerline files
+  file:
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - ".config/fontconfig/conf.d/"
+    - ".fonts"
+
+# - name: Check for powerline fonts
+#   command: find ~/.fonts/ -name 'PowerlineSymbols.otf'
+#   register: check_powerline_symbols
+#   failed_when: '"Powerline" not in check_powerline.stdout'
+#   ignore_errors: yes
+
+- name: get powerline symbols for console vim
+  get_url:
+    url: https://github.com/Lokaltog/powerline/raw/develop/font/PowerlineSymbols.otf
+    # set force to yes to impose a download everytime (good for upgrading)
+    force: no
+    dest: "{{ ansible_env.HOME }}/.fonts/PowerlineSymbols.otf"
+  register: get_powerline_symbols
+  # when: check_powerline_symbols|failed
+
+- name: Update fonts registry
+  command: fc-cache -vf ~/.fonts/
+  when: get_powerline_symbols|changed
+
+- name: get powerline configuration file for console vim
+  get_url:
+    url: https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
+    # set force to yes to impose a download everytime (good for upgrading)
+    force: no
+    dest: ~/.config/fontconfig/conf.d/10-powerline-symbols.conf

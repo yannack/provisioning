@@ -1,0 +1,4 @@
+---
+  - include: gvim.yml
+  - include: powerline.yml
+  - include: gnome-terminal.yml

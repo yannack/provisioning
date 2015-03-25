@@ -1,0 +1,52 @@
+---
+- name: get vim
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - vim
+    - cscope
+    - exuberant-ctags
+  sudo: yes
+
+- name: get vim dotfiles
+  git:
+    repo: https://github.com/yannack/.vim.git
+    dest: "{{ ansible_env.HOME }}/.vim/"
+    clone: yes
+    update: yes
+
+- name: vim - place vimrc in target location
+  file:
+      src: "{{ ansible_env.HOME }}/.vim/.vimrc"
+      dest: "{{ ansible_env.HOME }}/.vimrc"
+      state: link
+
+- name: vim - make sure bundle directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.vim/bundle"
+    state: directory
+    mode: 0755
+
+- name: vim - checkout vundle repo
+  git:
+    repo: https://github.com/gmarik/vundle.vim.git
+    dest: "{{ ansible_env.HOME }}/.vim/bundle/Vundle.vim"
+
+- name: update YCM manually
+  git:
+    repo: https://github.com/Valloric/YouCompleteMe.git
+    dest: "{{ ansible_env.HOME }}/.vim/bundle/YouCompleteMe"
+    clone: yes
+    update: yes
+  register: updatedYCM
+
+- include: ycm-vim.yml
+
+- name: vim - run Plugins install
+  command: vim +PluginInstall +qall
+
+- name: vim - run Plugins update
+  command: vim +PluginUpdate +qall
+

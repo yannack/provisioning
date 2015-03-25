@@ -1,0 +1,44 @@
+---
+- name: get bd utility
+  get_url:
+    url: https://raw.github.com/vigneshwaranr/bd/master/bd
+    # set force to yes to impose a download everytime (good for upgrading)
+    force: yes
+    dest: /usr/bin/bd
+    mode: a+rx
+  sudo: yes
+
+- name: get bd utility shell completions
+  get_url:
+    url: https://raw.github.com/vigneshwaranr/bd/master/bash_completion.d/bd
+    # set force to yes to impose a download everytime (good for upgrading)
+    force: yes
+    dest: /etc/bash_completion.d/bd
+  sudo: yes
+
+- name: download liquidprompt
+  git:
+    repo: https://github.com/nojhan/liquidprompt
+    dest: "{{ ansible_env.HOME }}/liquidprompt"
+    clone: yes
+    update: yes
+
+- name: get dotfiles repo
+  # this is no really needed, it is already done in vim, but in case of a
+  # manual play, this ensures everything works.
+  git:
+    repo: https://github.com/yannack/.vim.git
+    dest: "{{ ansible_env.HOME }}/.vim/"
+    clone: yes
+    # update really unwarranted here since update is already done for vim
+    update: no
+
+- name: place all dotfiles in proper location
+  file:
+    src: "{{ ansible_env.HOME }}/.vim/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/{{ item }}"
+    state: link
+    force: yes
+  with_items:
+    - .bashrc
+    - .liquidpromptrc

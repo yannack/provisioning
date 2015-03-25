@@ -1,0 +1,21 @@
+---
+# this is the gvim-only fix to have good looking powerline fonts. The vim part
+# is separate and kept in the common role.
+- name: Check for powerline fonts
+  command: find ~/.fonts/ -name '*powerline*'
+  register: check_powerline
+  changed_when: '"powerline" not in check_powerline.stdout'
+  failed_when: false
+  ignore_errors: yes
+
+- name: Checkout powerline fonts needed for gvim
+  git:
+    repo: https://github.com/powerline/fonts
+    dest: /tmp/powerline_fonts
+    clone: yes
+    update: yes
+  when: check_powerline|changed
+
+- name: Install powerline fonts
+  command: /tmp/powerline_fonts/install.sh
+  when: check_powerline|changed

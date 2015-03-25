@@ -1,0 +1,46 @@
+---
+- name: set default profile
+  gconftool-2: 
+    key: /apps/gnome-terminal/global/default_profile 
+    string: solarized-light
+  register: default_profile
+
+- name: add profile to list of available profiles
+  gconftool-2:
+    key: /apps/gnome-terminal/global/profile_list
+    list-type: string
+    list: ["Default", "solarized-light"]
+  register: added_profile_gterm
+  when: default_profile|changed
+
+- name: restore previous list if it was not just "Default"
+  gconftool-2:
+    key: /apps/gnome-terminal/global/profile_list
+    list-type: string
+    list: "{{ added_profile_gterm.old_value|replace(' ','')|replace(',','\", \"')|replace(']','\"]')|replace('[','[\"')|from_json + ['solarized-light'] }}"
+  when: added_profile_gterm|changed and added_profile_gterm.old_value != "[Default]"
+
+- name: create new profile strings
+  gconftool-2: 
+    key: "/apps/gnome-terminal/profiles/solarized-light/{{ item.key }}"
+    string: "{{ item.string }}"
+  with_items:
+    - { key: 'visible_name', string: 'Solarized-light' }
+
+- name: create new profile bools
+  gconftool-2: 
+    key: "/apps/gnome-terminal/profiles/solarized-light/{{ item.key }}"
+    bool: "{{ item.bool }}"
+  with_items:
+    - { key: 'scrollback_unlimited', bool: 'true' }
+
+- name: checkout solarized colors
+  git:
+    repo: https://github.com/Anthony25/gnome-terminal-colors-solarized
+    dest: "/tmp/gnome-terminal-colors-solarized"
+    clone: yes
+  when: default_profile|changed
+
+- name: install solarized colors
+  command: /tmp/gnome-terminal-colors-solarized/install.sh -s light -p solarized-light
+  when: default_profile|changed
