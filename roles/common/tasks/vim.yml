@@ -8,6 +8,7 @@
     - vim
     - cscope
     - exuberant-ctags
+    - silversearcher-ag
   sudo: yes
 
 - name: get vim dotfiles

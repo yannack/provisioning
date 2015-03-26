@@ -1,0 +1,39 @@
+---
+# sets up the qwerty-fr optimized layout
+- name: check if layout already installed
+  command: dpkg -l xkb-qwerty-fr
+  ignore_errors: True
+  register: layout_avail
+
+- name: download layout .deb
+  get_url:
+    url: http://marin.jb.free.fr/qwerty-fr/xkb-qwerty-fr_0.5_all.deb
+    dest: /tmp/xkb-qwerty-fr_0.5_all.deb
+    force: no
+  when: layout_avail|failed
+
+- name: install layout deb
+  apt:
+    deb: /tmp/xkb-qwerty-fr_0.5_all.deb
+  sudo: yes
+  when: layout_avail|failed
+
+- name: set layout as default layout in cinnamon
+  dconf:
+    key: /org/gnome/libgnomekbd/keyboard/layouts
+    string: ['us\tqwerty-fr']
+
+- name: set default modifier key in cinnamon
+  dconf:
+    key: /org/gnome/libgnomekbd/keyboard/options
+    string: ['Compose key\tcompose:rwin']
+
+- name: set layout as default layout for unity
+  dconf:
+    key: /org/gnome/desktop/input-sources/sources
+    string: "[('xkb','us+qwerty-fr')]"
+
+- name: set layout as default layout for unity
+  dconf:
+    key: /org/gnome/desktop/input-sources/current
+    int: 0

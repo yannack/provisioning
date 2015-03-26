@@ -13,4 +13,5 @@ sudo -H pip install -r requirements.txt
 ansible-playbook setup.yml -i HOSTS --ask-sudo-pass  --module-path ./ansible_modules # --extra-vars "@config.json"
 
 echo "The ~/.provisioning folder contains the deployment repository. This can be used to deploy elsewhere over ssh, or upgrade later."
+echo "NB: The qwerty-fr keyboard may not work until you log out and back in to the session."
 exit 0

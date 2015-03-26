@@ -65,7 +65,7 @@ Or you may want to provision multiple machines: edit HOSTS and setup.yml.
 
 Credits
 -------
-This was largely inspired by, and re-uses the gconftool-2 module for ansible
-of, [Joseph Kahn's similar
+This was largely inspired by, and re-uses the gconftool-2 and dconf modules for
+ansible of, [Joseph Kahn's similar
 project](https://github.com/JBKahn/provisioning-local/)
 
