@@ -1,0 +1,42 @@
+---
+- name: install conky
+  apt:
+    name: conky
+    update_cache: yes
+    cache_valid_time: 3600
+  sudo: yes
+
+- name: get dotfiles repo
+  # this is no really needed, it is already done in vim, but in case of a
+  # manual play, this ensures everything works.
+  git:
+    repo: https://github.com/yannack/dotfiles.git
+    dest: "{{ ansible_env.HOME }}/.dotfiles/"
+    clone: yes
+    # update really unwarranted here since update is already done for vim
+    update: no
+
+- name: make sure autostart directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/autostart"
+    state: directory
+    mode: 0755
+
+- name: setup autostart
+  template:
+    dest: "{{ ansible_env.HOME }}/.config/autostart/start_conkys.sh.desktop"
+    src: start_conkys.sh.desktop.j2
+    force: no
+    mode: 0755
+
+- name: prepare path for openlogos font
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/fonts"
+    state: directory
+    mode: 0755
+
+- name: openlogos symbols for conky
+  copy:
+    src: openlogos.ttf
+    force: no
+    dest: "{{ ansible_env.HOME }}/.local/share/fonts/openlogos.ttf"

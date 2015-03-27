@@ -13,15 +13,21 @@
 
 - name: get vim dotfiles
   git:
-    repo: https://github.com/yannack/.vim.git
-    dest: "{{ ansible_env.HOME }}/.vim/"
+    repo: https://github.com/yannack/dotfiles.git
+    dest: "{{ ansible_env.HOME }}/.dotfiles/"
     clone: yes
     update: yes
 
 - name: vim - place vimrc in target location
   file:
-      src: "{{ ansible_env.HOME }}/.vim/.vimrc"
+      src: "{{ ansible_env.HOME }}/.dotfiles/vim/.vimrc"
       dest: "{{ ansible_env.HOME }}/.vimrc"
+      state: link
+
+- name: vim - place .vim folder in target location
+  file:
+      src: "{{ ansible_env.HOME }}/.dotfiles/vim/.vim"
+      dest: "{{ ansible_env.HOME }}/.vim"
       state: link
 
 - name: vim - make sure bundle directory exists

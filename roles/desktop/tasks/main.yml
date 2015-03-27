@@ -3,3 +3,5 @@
   - include: powerline.yml
   - include: gnome-terminal.yml
   - include: qwertyfr.yml
+  - include: conky.yml
+  - include: redshift.yml
