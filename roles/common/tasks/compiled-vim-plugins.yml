@@ -1,5 +1,5 @@
 ---
-- name: YCM dependencies
+- name: plugin build dependencies
   apt:
     name: "{{ item }}"
     update_cache: yes
@@ -13,3 +13,9 @@
 - name: recompile YCM
   command: "{{ ansible_env.HOME }}/.vim/bundle/YouCompleteMe/install.sh"
   when: updatedYCM|changed
+
+- name: recompile vimproc
+  command: "make"
+  args:
+    chdir: "{{ ansible_env.HOME }}/.vim/bundle/vimproc.vim"
+  when: updatedvimproc|changed

@@ -41,7 +41,7 @@
     repo: https://github.com/gmarik/vundle.vim.git
     dest: "{{ ansible_env.HOME }}/.vim/bundle/Vundle.vim"
 
-- name: update YCM manually
+- name: checkout YCM manually
   git:
     repo: https://github.com/Valloric/YouCompleteMe.git
     dest: "{{ ansible_env.HOME }}/.vim/bundle/YouCompleteMe"
@@ -49,7 +49,15 @@
     update: yes
   register: updatedYCM
 
-- include: ycm-vim.yml
+- name: checkout vimproc manually
+  git:
+    repo: https://github.com/Shougo/vimproc.vim
+    dest: "{{ ansible_env.HOME }}/.vim/bundle/vimproc.vim"
+    clone: yes
+    update: yes
+  register: updatedvimproc
+
+- include: compiled-vim-plugins.yml
 
 - name: vim - run Plugins install
   command: vim +PluginInstall +qall
