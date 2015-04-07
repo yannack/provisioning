@@ -5,3 +5,10 @@
     update_cache: yes
     cache_valid_time: 3600
   sudo: yes
+
+- name: context menu to open in gvim buffer
+  copy:
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/gvim-buffers.desktop"
+    src: gvim-buffers.desktop
+    force: no
+    mode: 0755

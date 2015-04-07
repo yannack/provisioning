@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=GVim (Buffers)
+Comment=Edit text files in a new gvim buffer
+Exec=gvim --remote-silent %F
+Terminal=false
+Type=Application
+Icon=vim
+Categories=Application;Utility;TextEditor;
+StartupNotify=true
+MimeType=text/plain;
+NoDisplay=true
