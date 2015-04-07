@@ -1,0 +1,38 @@
+---
+- name: setup git template folder
+  command: "git config --global init.templatedir '~/.git_template'"
+
+- name: setup "git ctags" alias
+  command: "git config --global alias.ctags '!.git/hooks/ctags'"
+
+- name: make sure .git_template/hooks folder exists
+  file:
+    path: "{{ ansible_env.HOME }}/.git_template/hooks"
+    state: directory
+    mode: 0755
+
+- name: place ctags updating script
+  file:
+    dest: "{{ ansible_env.HOME }}/.git_template/hooks/ctags"
+    src: ctags_git_hook
+    force: no
+    mode: 0755
+
+- name: place ctags hook file post commit, merge, checkout
+  file:
+    dest: "{{ ansible_env.HOME }}/.git_template/hooks/{{ item }}"
+    src: ctags_git_hook_file
+    force: no
+    mode: 0755
+  with_items:
+    - post-commit
+    - post-merge
+    - post-checkout
+
+- name: place ctags hook file post rebase
+  file:
+    dest: "{{ ansible_env.HOME }}/.git_template/hooks/post-rewrite"
+    src: ctags_git_hook_file_rebase
+    force: no
+    mode: 0755
+
