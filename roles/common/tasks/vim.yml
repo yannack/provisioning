@@ -1,5 +1,5 @@
 ---
-- name: get vim
+- name: get vim and a few useful side-tools
   apt:
     name: "{{ item }}"
     update_cache: yes
@@ -9,6 +9,7 @@
     - cscope
     - exuberant-ctags
     - silversearcher-ag
+    - shellcheck
   sudo: yes
 
 - name: get vim dotfiles
