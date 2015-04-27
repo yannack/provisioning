@@ -42,8 +42,9 @@
   with_items:
     - .bashrc
     - .liquidpromptrc
+    - .tmux.conf
 
-- name: install various utilities: tree, ...
+- name: install various utilities,eg, tree, tmux, ...
   apt:
     name: "{{ item }}"
     update_cache: yes
@@ -51,3 +52,4 @@
   sudo: yes
   with_items:
     - tree
+    - tmux
