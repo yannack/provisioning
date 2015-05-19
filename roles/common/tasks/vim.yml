@@ -12,6 +12,17 @@
     - shellcheck
   sudo: yes
 
+- name: plugin build dependencies
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - build-essential
+    - cmake
+    - python-dev
+  sudo: yes
+
 - name: get vim dotfiles
   git:
     repo: https://github.com/yannack/dotfiles.git
@@ -37,32 +48,8 @@
     state: directory
     mode: 0755
 
-- name: vim - checkout vundle repo
-  git:
-    repo: https://github.com/gmarik/vundle.vim.git
-    dest: "{{ ansible_env.HOME }}/.vim/bundle/Vundle.vim"
-
-- name: checkout YCM manually
-  git:
-    repo: https://github.com/Valloric/YouCompleteMe.git
-    dest: "{{ ansible_env.HOME }}/.vim/bundle/YouCompleteMe"
-    clone: yes
-    update: yes
-  register: updatedYCM
-
-- name: checkout vimproc manually
-  git:
-    repo: https://github.com/Shougo/vimproc.vim
-    dest: "{{ ansible_env.HOME }}/.vim/bundle/vimproc.vim"
-    clone: yes
-    update: yes
-  register: updatedvimproc
-
-- include: compiled-vim-plugins.yml
-
 - name: vim - run Plugins install
-  command: vim +PluginInstall +qall
+  command: vim +PlugInstall +qall
 
 - name: vim - run Plugins update
-  command: vim +PluginUpdate +qall
-
+  command: vim +PlugUpdate +qall
