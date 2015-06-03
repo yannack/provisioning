@@ -44,6 +44,13 @@
     - .liquidpromptrc
     - .tmux.conf
 
+- name: place custom bin folder
+  file:
+    src: "{{ ansible_env.HOME }}/.dotfiles/bin"
+    dest: "{{ ansible_env.HOME }}/bin"
+    state: link
+    force: yes
+
 - name: install various utilities,eg, tree, tmux, ...
   apt:
     name: "{{ item }}"

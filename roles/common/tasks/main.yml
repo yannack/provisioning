@@ -3,3 +3,4 @@
   - include: powerline.yml
   - include: bash-customization.yml
   - include: git.yml
+  - include: wemux.yml

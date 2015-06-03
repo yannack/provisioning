@@ -1,0 +1,39 @@
+---
+- name: get wemux
+  git:
+    repo: https://github.com/zolrath/wemux.git
+    dest: /usr/local/share/wemux
+    clone: yes
+    update: yes
+  sudo: yes
+
+- name: make wemux callable
+  file:
+    src: /usr/local/share/wemux/wemux
+    dest: /usr/local/bin/wemux
+    state: link
+    force: yes
+  sudo: yes
+
+- name: make sure the configuration folder for wemux exists
+  file:
+    path: /usr/local/etc/
+    state: directory
+    mode: 0755
+  sudo: yes
+
+# Only the current user can initially start wemux
+- name: setup master rights
+  template:
+    dest: /usr/local/etc/wemux.conf
+    src: wemux_conf.j2
+    force: no
+    mode: 0644
+  sudo: yes
+
+- name: install openssh server
+  apt:
+    name: openssh-server
+    update_cache: yes
+    cache_valid_time: 3600
+  sudo: yes
