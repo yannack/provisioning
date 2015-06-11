@@ -44,3 +44,6 @@
 - name: install solarized colors
   command: /tmp/gnome-terminal-colors-solarized/install.sh -s light -p solarized-light
   when: default_profile|changed
+
+- name: make cursor stop blinking when focus is lost
+  command: gsettings set org.gnome.desktop.interface cursor-blink-timeout 1
